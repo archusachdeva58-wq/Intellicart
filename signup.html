@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<Style>
+ .signing{
+        width:40%;
+        display:flex;
+        flex-direction:Column;
+        gap:15px;
+        justify-content:center;
+        align-items:center;
+        height:93vh;
+        color:rgba(236,72,153);
+        padding:10px;
+    }
+      .signing img{
+       width:200px;
+       height:100px;
+       object-fit:cover;
+       border-radius:8px;
+       margin:0;
+    }
+.page{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+}
+input:hover{
+    border:2px solid rgb(236, 72, 153);
+}
+.signing input{
+         color:rgba(236,72,153);
+        background-color:rgb(236, 72, 153,0.25);
+        border:none;
+        border-radius:8px;
+        font-weight:600;
+        padding:10px;
+        width:280px;
+    }
+     .signing h1{
+        margin:0;
+        font-size:40px;
+    }
+    .signing h3{
+        margin:0;
+
+    }
+    .signing button{
+        width:200px;
+        padding:10px;
+        color:rgba(236,72,153);
+        background-color: rgb(236, 72, 153,0.25);
+        border:none;
+        border-radius:8px;
+        font-weight:600;
+        cursor:pointer;
+    }
+    .check{
+        display:flex;
+        align-items:center;
+        gap:8px;
+    }
+    .check input{
+        width:15px;
+    }
+    #error{
+    color:red;
+    font-size:14px;
+    height:20px;
+}
+@media(max-width:768px){
+
+.signing{
+width:90%;
+}
+
+}
+</style>
+<body>
+    <div class="page">
+    <div class="signing">
+       <img src="logo.png">
+       <h1>Welcome to Intellicart</h1>
+       <h3>Create your account and start shopping smarter.</h3>
+       <input type="text" id="name" placeholder="👤Enter Your Full Name">
+       <input type="email" id="mail" placeholder="📧Enter Your Email">
+       <input type="text" id="number" placeholder="📱Enter Your Phone Number">
+       <input type="password" id="password" placeholder="🔒Create a Password">
+       <input type="password" id="confirm" placeholder="🔒 Confirm Your Password">
+       <div class="check"><input type="checkbox" id="c1">I agree to the terms and conditions</div>
+       <p id="error"></p>
+       <button id="create">Create Account</button>
+    </div>
+    </div>
+    <script>
+       document.getElementById("error").style.display="None";
+      let btn=document.getElementById("create");
+      let name=document.getElementById("name");
+      let mail=document.getElementById("mail");
+      let num=document.getElementById("number");
+      let pass=document.getElementById("password");
+      let confirm=document.getElementById("confirm");
+      let check=document.getElementById("c1");
+      btn.addEventListener("click",()=>{
+      if(name.value.trim()==""){
+        name.value="";
+        name.placeholder="Please fill out this field";
+        name.focus();
+      }
+      else if(/\d/.test(name.value.trim())){
+        name.value="";
+        name.placeholder="Please enter a valid name";
+        name.focus();
+      }
+      else if(mail.value.trim()==""){
+        mail.value="";
+        mail.placeholder="Please fill out this field";
+        mail.focus();
+      }
+      else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail.value.trim())){
+           mail.value="";
+           mail.placeholder="Please enter a valid mail";
+           mail.focus();
+      }
+      else if(num.value.trim()==""){
+        num.value="";
+        num.placeholder="Please fill out this field";
+        num.focus();
+      }
+      else if(!/^\d{10}$/.test(num.value.trim())){
+        num.value="";
+        num.placeholder="Please enter a valid number";
+        num.focus();
+      }
+      else if(pass.value.trim()==""){
+        pass.value="";
+        pass.placeholder="Please enter a password";
+        pass.focus();
+      }
+      else if(pass.value.trim().length<6){
+        pass.value="";
+        pass.placeholder="Please enter a valid password";
+        pass.focus();
+      }
+      else if(confirm.value.trim()==""){
+            confirm.value="";
+            confirm.placeholder="Please fill out this field";
+            confirm.focus();
+      }
+      else if(confirm.value!=pass.value){
+        confirm.value="";
+        confirm.placeholder="Enter a valid confirmation password";
+        confirm.focus();
+      }
+      else if(!check.checked){
+         document.getElementById("error").style.display="flex";
+    document.getElementById("error").innerText="⚠ Please accept Terms & Conditions.";
+      }
+      else{
+    let user = {
+        name: name.value.trim(),
+        email: mail.value.trim(),
+        phone: num.value.trim(),
+        password: pass.value.trim()
+    };
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let emailExists = users.some((user) => {
+    return user.email === mail.value.trim();
+});
+if(emailExists){
+    alert("email already registered you can login");
+    window.location.href = "cart.html";
+}
+else{
+     users.push(user);
+     localStorage.setItem("users", JSON.stringify(users));
+    btn.innerText = "Account Created";
+    btn.style.backgroundColor = "green";
+    btn.style.color = "white";
+    setTimeout(() => {
+    window.location.href = "cart.html";
+}, 2000);
+}
+      }
+    });
+     
+document.addEventListener("keydown",(e)=>{
+
+if(e.key==="Enter"){
+btn.click();
+}
+
+});
+      
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+body{
+    background:#fff7fb;
+}
+.heading{
+    text-align:center;
+    color:rgb(236,72,153);
+}
+#cart-container{
+    width:90%;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+.cart-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#FFCEE3;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 8px 20px rgba(236,72,153,.25);
+}
+.left{
+display:flex;
+gap:20px;
+align-items:center;
+}
+.left img{
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:10px;
+}
+.right{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+button{
+background:rgb(236,72,153);
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+}
+.summary{
+margin-top:40px;
+display:flex;
+justify-content:space-around;
+align-items:center;
+}
+@media(max-width:768px){
+
+.cart-card{
+flex-direction:column;
+align-items:center;
+text-align:center;
+}
+
+}
+</style>
+<body>
+    <h1 class="heading">🛒 My Shopping Cart</h1>
+<div id="cart-container"></div>
+<div class="summary">
+    <h2>Total : ₹<span id="total">0</span></h2>
+    <button id="shop">Continue Shopping</button>
+</div>
+</body>
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let container = document.getElementById("cart-container");
+let total = 0;
+cart.forEach((item,index)=>{
+total += Number(item.price.replace("₹","")) * item.quantity;
+container.innerHTML += `
+<div class="cart-card">
+<div class="left">
+<img src="${item.image}">
+<div>
+<h2>${item.name}</h2>
+<h3>${item.price}</h3>
+<p>Quantity : ${item.quantity}</p>
+</div>
+</div>
+<div class="right">
+<button onclick="increase(${index})">+</button>
+<button onclick="decrease(${index})">-</button>
+<button onclick="removeItem(${index})">🗑 Remove</button>
+</div>
+</div>
+`;
+});
+document.getElementById("total").innerText = total;
+function increase(index){
+cart[index].quantity++;
+localStorage.setItem("cart",JSON.stringify(cart));
+location.reload();
+}
+function decrease(index){
+if(cart[index].quantity>1){
+cart[index].quantity--;
+}
+localStorage.setItem("cart",JSON.stringify(cart));
+location.reload();
+}
+function removeItem(index){
+cart.splice(index,1);
+localStorage.setItem("cart",JSON.stringify(cart));
+location.reload();
+}
+document.getElementById("shop").onclick=()=>{
+window.location.href="inteli.html";
+}
+</script>
+</html>

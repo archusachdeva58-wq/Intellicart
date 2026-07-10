@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #wishlist{
+        width:99%;
+        display:flex;
+       flex-wrap:wrap;
+        gap:15px;
+        padding:10px;
+        justify-content:center;
+        align-items:center;
+        color:rgb(236, 72, 153);
+    }
+    .accesory-cards{
+        display:flex;
+        flex-direction:Column;
+        padding:10px;
+        border-radius:8px;
+        text-align:left;
+         background-color:#FFCEE3;
+        color:rgb(236, 72, 153);
+        justify-content:center;
+        align-items:center;
+        gap:5px;
+        flex-shrink:0;
+    }
+    .accesory-cards h1{
+        font-size:24px;
+    }
+    .accesory-cards img{
+       height:200px;
+       width:200px;
+       object-fit:Cover;
+       border-radius:8px;
+    }
+    h2,h3{
+        margin:0;
+    }
+    #head{
+        display:flex;
+        margin:auto;
+        width:100%;
+        justify-content: center;
+        align-items:center;
+        color:rgb(236, 72, 153);
+        gap:50px;
+    }
+     button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(236,72,153,.3);
+    border:2px solid rgb(236, 72, 153);
+}
+button{
+        width:200px;
+        margin:0;
+        background-color:rgb(236, 72, 153);
+        color:white;
+        border:none;
+        border-radius:8px;
+        height:30px;
+        cursor:pointer;
+    }
+    @media(max-width:768px){
+
+.accesory-cards{
+width:45%;
+}
+
+}
+
+@media(max-width:480px){
+
+.accesory-cards{
+width:100%;
+}
+
+}
+    </style>
+    <body>
+        <div id="head">
+    <h1>My Wishlist ❤️</h1>
+    <button onclick="window.location.href='inteli.html'">
+⬅ Continue Shopping
+</button>
+</div>
+<div id="wishlist"></div>
+<Script>
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+let container = document.getElementById("wishlist");
+wishlist.forEach((item,index)=>{
+container.innerHTML +=`
+<div class="accesory-cards">
+<img src="${item.image}">
+<h2>${item.name}</h2>
+<h3>${item.price}</h3>
+<button onclick="removeItem(${index})">Remove</button>
+</div>
+`;
+});
+function removeItem(index){
+
+    wishlist.splice(index,1);
+
+    localStorage.setItem("wishlist",JSON.stringify(wishlist));
+
+    location.reload();
+
+}
+if(wishlist.length===0){
+
+container.innerHTML=`
+<h2>Your Wishlist is Empty 💔</h2>
+`;
+
+}
+</Script>
+</body>
+</html>

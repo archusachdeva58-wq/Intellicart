@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntelliCart</title>
+</head>
+<style>
+    .login{
+        width:100%;
+        display:flex;
+        gap:5px;
+    }
+    .login-left{
+        width:50%;
+        padding:10px;
+        display:flex;
+        flex-direction:column;
+        gap:15px;
+        justify-content:center;
+        align-items:center;
+        height:90vh;
+        border-radius:8px;
+        box-shadow: 0 12px 30px rgb(236, 72, 153,0.25);
+        color:rgba(236,72,153);
+    }
+    .login-left p{
+        margin:0;
+        font-size:17px;
+        width:300px;
+        line-height:1.5;
+    }
+    .login-right{
+        width:50%;
+        display:flex;
+        flex-direction:Column;
+        gap:15px;
+        justify-content:center;
+        align-items:center;
+        border:2px solid pink;
+        border-radius:8px;
+        height:90vh;
+        box-shadow: 0 12px 30px rgb(236, 72, 153,0.25);
+        color:rgba(236,72,153);
+        padding:10px;
+    }
+    .check{
+        display:flex;
+        gap:8px;
+        align-items:center;
+    }
+    .login-right img{
+        height:100px;
+        width:100px;
+        object-fit:cover;
+        border-radius:50%;
+    }
+    .login-right h1,.login-left h1{
+        margin:0;
+        font-size:40px;
+    }
+    .login-right button{
+        width:200px;
+        padding:10px;
+        color:rgba(236,72,153);
+        background-color: rgb(236, 72, 153,0.25);
+        border:none;
+        border-radius:8px;
+        font-weight:600;
+        cursor:pointer;
+    }
+    .login-right input{
+         color:rgba(236,72,153);
+        background-color:rgb(236, 72, 153,0.25);
+        border:none;
+        border-radius:8px;
+        font-weight:600;
+        padding:10px;
+    }
+    .login-left img{
+       width:50%;
+       object-fit:cover;
+       border-radius:8px;
+    }
+    .divider hr{
+    border: 1px solid rgb(236, 72, 153);
+    width:40%;
+    flex:1;
+}
+.divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+}
+input:hover{
+    border:2px solid rgb(236, 72, 153);
+}
+#error{
+    color:red;
+    font-size:14px;
+    height:20px;
+}
+@media(max-width:768px){
+
+.login{
+flex-direction:column;
+}
+
+.login-left,
+.login-right{
+width:100%;
+height:auto;
+}
+
+}
+</style>
+<body>
+   <div class="login">
+    <div class="login-left">
+        <img src="logo.png">
+       <h1>Smart Shopping Starts Here</h1>
+       <p>A touch of pink, a world of shopping—discover products you'll love with IntelliCart. 💖</p>
+    </div>
+    <div class="login-right">
+        <img src="https://i.pinimg.com/736x/b6/08/d7/b608d742e1a90b5b22d906ed3798bb1e.jpg">
+        <h1>Welcome Back</h1>
+        <input type="text" id="mail" placeholder="Enter Your Mail">
+        <input type="password" id="password" placeholder="Enter Your Password">
+        <p id="error"></p>
+        <div class="check"><input type="checkbox" id="c1">Remember Me</div>
+        <button id="login">Login</button>
+        <div class="divider">
+    <hr>
+    <span>OR</span>
+    <hr>
+</div>
+        <h1> Don't have an account?</h1>
+        <a href=signup.html><button>Signup</button></a>
+    </div>
+   </div> 
+   <script>
+    if(localStorage.getItem("loggedUser")){
+    window.location.href="inteli.html";
+}
+ document.getElementById("error").style.display="None";
+    let btn=document.getElementById("login");
+    let email=document.getElementById("mail");
+    let pass=document.getElementById("password");
+    let remember = document.getElementById("c1");
+    btn.addEventListener("click",()=>{ 
+    if(email.value.trim()==""){
+        email.value="";
+        email.placeholder="Please fill this field";
+        email.focus();
+    }
+    else if(pass.value.trim()==""){
+        pass.value="";
+        pass.placeholder="Please fill this field";
+        pass.focus();
+    }
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){
+        email.value="";
+        email.placeholder="Enter a valid mail";
+        email.focus();
+    }
+    else if(pass.value.trim().length<6){
+        pass.value="";
+        pass.placeholder="Enter a valid password";
+        pass.focus();
+    }
+    else{
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+let foundUser = users.find((user) => {
+    return user.email === email.value.trim();
+});
+if(!foundUser){
+    document.getElementById("error").style.display="flex";
+    document.getElementById("error").innerText="User Not Found Redirecting To Signup";
+     setTimeout(() => {
+   window.location.href = "signup.html";
+   document.getElementById("error").style.display="None";
+}, 2000);
+
+}
+else if (foundUser.password !== pass.value.trim()) {
+    pass.value="";
+    pass.placeholder="Incorrect Password";
+    pass.focus();
+}
+else{
+        localStorage.setItem("loggedUser", JSON.stringify(foundUser));
+        btn.innerText="Logging In";
+        btn.disabled=true;
+         setTimeout(() => {
+    window.location.href = "inteli.html";
+}, 2000);
+}
+    }
+    if (remember.checked) {
+    localStorage.setItem("email", email.value);
+} else {
+    localStorage.removeItem("email");
+
+}
+});
+window.onload = function () {
+    let savedEmail = localStorage.getItem("email");
+
+    if (savedEmail) {
+        email.value = savedEmail;
+        remember.checked = true;
+    }
+}
+remember.addEventListener("change", () => {
+    if (!remember.checked) {
+        localStorage.removeItem("email");
+        email.value = "";
+    }
+});
+document.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter"){
+        btn.click();
+    }
+});
+
+   </script>
+</body>
+</html>
